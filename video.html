@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Илья & Мария · 07.06.2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;0,300&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#090807; display:flex; align-items:center; justify-content:center; min-height:100vh; overflow:hidden; }
+    canvas { display:block; }
+    #replay {
+      position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
+      background:transparent; border:1px solid rgba(196,164,107,0.5);
+      color:rgba(196,164,107,0.9); padding:11px 38px;
+      font-family:'Cormorant Garamond',serif; font-size:15px;
+      letter-spacing:0.35em; cursor:pointer; display:none; transition:all 0.3s;
+    }
+    #replay:hover { background:rgba(196,164,107,0.15); border-color:rgba(196,164,107,0.9); }
+    #back {
+      position:fixed; top:22px; left:22px; color:rgba(196,164,107,0.55);
+      font-family:'Cormorant Garamond',serif; font-size:14px;
+      letter-spacing:0.22em; cursor:pointer; text-decoration:none;
+      transition:color 0.3s;
+    }
+    #back:hover { color:rgba(196,164,107,1); }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<button id="replay">повтор</button>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const W = 1280, H = 720;
+canvas.width = W; canvas.height = H;
+
+// offscreen fog canvas
+const fogC = document.createElement('canvas');
+fogC.width = W; fogC.height = H;
+const fogCtx = fogC.getContext('2d');
+
+function resize() {
+  const s = Math.min(window.innerWidth / W, window.innerHeight / H);
+  canvas.style.width = (W*s)+'px'; canvas.style.height = (H*s)+'px';
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ── CONFIG ─────────────────────────────────────────────────
+const FONT_BIG  = 'italic 300 96px "Cormorant Garamond"';
+const FONT_DATE = '300 28px "Cormorant Garamond"';
+const GOLD  = [196,164,107];
+const CREAM = [255,248,235];
+
+// Timeline (seconds)
+const TL = {
+  fadeIn:    [0,   2.2],
+  fogOn:     [1.8, 4  ],
+  writeIlya: [4,   9  ],
+  writeAmp:  [9.5, 11 ],
+  writeMasha:[11.5,16.5],
+  shimmer:   [17,  21 ],
+  writeDate: [18,  21 ],
+  writeOrnament:[20.5,22],
+  hearts:    [21.5,32 ],
+  sparkCont: [9.5, 32 ],
+};
+const DURATION = 32;
+
+// ── HELPERS ────────────────────────────────────────────────
+function easeOut(t)   { return 1-Math.pow(1-t,3); }
+function easeIO(t)    { return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2; }
+function clamp(v,a,b) { return Math.max(a,Math.min(b,v)); }
+function prog(s,e,t,ease) {
+  const p = clamp((t-s)/(e-s),0,1);
+  return ease ? ease(p) : p;
+}
+
+// ── TEXT LAYOUT ────────────────────────────────────────────
+let WI,WA,WM,WD, XI,XA,XM,XD;
+const YT = H/2+28, YD = YT+72, YO = YD+42;
+
+function measure() {
+  ctx.font = FONT_BIG;
+  WI = ctx.measureText('Илья').width;
+  WA = ctx.measureText(' \u0026 ').width;
+  WM = ctx.measureText('Мария').width;
+  XI = W/2-(WI+WA+WM)/2;
+  XA = XI+WI; XM = XA+WA;
+  ctx.font = FONT_DATE;
+  WD = ctx.measureText('07 · 06 · 2026').width;
+  XD = W/2-WD/2;
+}
+
+// ── FOG BLOBS ──────────────────────────────────────────────
+const blobs = Array.from({length:14}, ()=>({
+  x:Math.random()*W, y:Math.random()*H,
+  r:65+Math.random()*120,
+  vx:(Math.random()-.5)*.11, vy:(Math.random()-.5)*.08,
+  ph:Math.random()*Math.PI*2
+}));
+
+// ── PARTICLES ──────────────────────────────────────────────
+let parts = [];
+
+function addSparkle(x,y) {
+  parts.push({
+    t:'s', x, y,
+    vx:(Math.random()-.5)*3, vy:-.5-Math.random()*2.5,
+    sz:1+Math.random()*2.5,
+    life:1, decay:.013+Math.random()*.016,
+    gold:Math.random()>.4
+  });
+}
+
+function addHeart(x,y) {
+  parts.push({
+    t:'h', x, y,
+    vx:(Math.random()-.5)*1.3, vy:-.35-Math.random()*.85,
+    sz:11+Math.random()*20,
+    rot:(Math.random()-.5)*.3, rotV:(Math.random()-.5)*.025,
+    life:1, decay:.004+Math.random()*.006
+  });
+}
+
+function heartPath(c) {
+  c.beginPath();
+  c.moveTo(0,-4); c.bezierCurveTo(4,-14,18,-10,18,0);
+  c.bezierCurveTo(18,9,9,17,0,24);
+  c.bezierCurveTo(-9,17,-18,9,-18,0);
+  c.bezierCurveTo(-18,-10,-4,-14,0,-4);
+}
+
+function tickParts() {
+  for(let i=parts.length-1;i>=0;i--) {
+    const p=parts[i];
+    p.x+=p.vx; p.y+=p.vy; p.life-=p.decay;
+    if(p.t==='h') p.rot+=p.rotV;
+    if(p.life<=0) parts.splice(i,1);
+  }
+}
+
+function drawParts() {
+  parts.forEach(p=>{
+    ctx.save();
+    ctx.globalAlpha=Math.max(0,p.life);
+    if(p.t==='s') {
+      const c=p.gold?`rgb(${GOLD})`:`rgb(${CREAM})`;
+      ctx.shadowColor=c; ctx.shadowBlur=9;
+      ctx.fillStyle=c;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.sz,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle=c; ctx.lineWidth=.4;
+      ctx.globalAlpha=Math.max(0,p.life*.45);
+      ctx.beginPath();
+      ctx.moveTo(p.x-p.sz*3,p.y); ctx.lineTo(p.x+p.sz*3,p.y);
+      ctx.moveTo(p.x,p.y-p.sz*3); ctx.lineTo(p.x,p.y+p.sz*3);
+      ctx.stroke();
+    } else {
+      ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.scale(p.sz/20,p.sz/20);
+      ctx.shadowColor=`rgba(${GOLD},.5)`; ctx.shadowBlur=14;
+      ctx.fillStyle=`rgba(${GOLD},.82)`;
+      heartPath(ctx); ctx.fill();
+    }
+    ctx.restore();
+  });
+}
+
+// ── PEN GLOW ───────────────────────────────────────────────
+function penGlow(x,y,a) {
+  if(a<=0) return;
+  const g=ctx.createRadialGradient(x,y,0,x,y,34);
+  g.addColorStop(0,`rgba(255,245,220,${.95*a})`);
+  g.addColorStop(.3,`rgba(240,210,130,${.55*a})`);
+  g.addColorStop(1,'rgba(196,164,107,0)');
+  ctx.fillStyle=g;
+  ctx.beginPath(); ctx.arc(x,y,34,0,Math.PI*2); ctx.fill();
+  if(Math.random()<.3) addSparkle(x+(Math.random()-.5)*12,y+(Math.random()-.5)*12);
+}
+
+// ── ERASE FOG AT TEXT ──────────────────────────────────────
+function eraseFog(text,bx,p) {
+  if(p<=0) return;
+  fogCtx.save();
+  fogCtx.font=FONT_BIG;
+  const tw=fogCtx.measureText(text).width;
+  fogCtx.globalCompositeOperation='destination-out';
+  fogCtx.beginPath();
+  fogCtx.rect(bx-6,YT-135,tw*p+12,185);
+  fogCtx.clip();
+  fogCtx.shadowColor='rgba(0,0,0,1)'; fogCtx.shadowBlur=26;
+  fogCtx.fillStyle='rgba(0,0,0,1)';
+  fogCtx.fillText(text,bx,YT);
+  fogCtx.restore();
+}
+
+// ── GLOW TEXT ──────────────────────────────────────────────
+function glowText(text,bx,font,p,rgb,a) {
+  if(p<=0||a<=0) return;
+  ctx.save();
+  ctx.font=font;
+  const tw=ctx.measureText(text).width;
+  ctx.beginPath();
+  ctx.rect(bx-2,YT-140,tw*p+4,190);
+  ctx.clip();
+  ctx.shadowColor=`rgba(${rgb},.6)`; ctx.shadowBlur=28;
+  ctx.fillStyle=`rgba(${rgb},${a})`;
+  ctx.fillText(text,bx,YT);
+  ctx.shadowBlur=12;
+  ctx.fillStyle=`rgba(${rgb},${a*.45})`;
+  ctx.fillText(text,bx,YT);
+  ctx.restore();
+}
+
+// ── MAIN DRAW ──────────────────────────────────────────────
+let startT=null, rafId=null;
+
+function draw(t) {
+  ctx.clearRect(0,0,W,H);
+
+  // Background
+  const fi=prog(TL.fadeIn[0],TL.fadeIn[1],t,easeIO);
+  const bg=ctx.createRadialGradient(W*.5,H*.42,0,W*.5,H*.5,W*.85);
+  bg.addColorStop(0,`rgba(40,35,28,${fi})`);
+  bg.addColorStop(.55,`rgba(22,18,15,${fi})`);
+  bg.addColorStop(1,`rgba(9,8,7,${fi})`);
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+  // Glass sheen
+  const sh=ctx.createLinearGradient(0,0,W*.3,H*.5);
+  sh.addColorStop(0,`rgba(255,245,215,${.055*fi})`);
+  sh.addColorStop(1,'rgba(255,245,215,0)');
+  ctx.fillStyle=sh; ctx.fillRect(0,0,W,H);
+
+  // Frame
+  if(fi>.55) {
+    const la=(fi-.55)/.45*.17;
+    const m=55;
+    ctx.save();
+    ctx.strokeStyle=`rgba(${GOLD},${la})`; ctx.lineWidth=.8;
+    [[m,m,W-m,m],[m,H-m,W-m,H-m]].forEach(([x1,y1,x2,y2])=>{
+      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+    });
+    [[m,m],[W-m,m],[m,H-m],[W-m,H-m]].forEach(([cx,cy])=>{
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(Math.PI/4);
+      ctx.fillStyle=`rgba(${GOLD},${la*1.6})`; ctx.fillRect(-3,-3,6,6);
+      ctx.restore();
+    });
+    ctx.restore();
+  }
+
+  // Fog
+  const fa=prog(TL.fogOn[0],TL.fogOn[1],t);
+  if(fa>0) {
+    fogCtx.clearRect(0,0,W,H);
+    blobs.forEach(b=>{
+      b.x+=b.vx; b.y+=b.vy;
+      if(b.x<-b.r) b.x=W+b.r; if(b.x>W+b.r) b.x=-b.r;
+      if(b.y<-b.r) b.y=H+b.r; if(b.y>H+b.r) b.y=-b.r;
+      const a=.048*fa*(.7+.3*Math.sin(t*.5+b.ph));
+      const g=fogCtx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
+      g.addColorStop(0,`rgba(210,200,182,${a})`);
+      g.addColorStop(1,'rgba(210,200,182,0)');
+      fogCtx.fillStyle=g;
+      fogCtx.beginPath(); fogCtx.arc(b.x,b.y,b.r,0,Math.PI*2); fogCtx.fill();
+    });
+    const pI=prog(TL.writeIlya[0],TL.writeIlya[1],t,easeOut);
+    const pA=prog(TL.writeAmp[0],TL.writeAmp[1],t,easeOut);
+    const pM=prog(TL.writeMasha[0],TL.writeMasha[1],t,easeOut);
+    eraseFog('Илья',XI,pI);
+    eraseFog(' \u0026 ',XA,pA);
+    eraseFog('Мария',XM,pM);
+    ctx.drawImage(fogC,0,0);
+  }
+
+  // Ambient glow around text
+  const gp=prog(4,14,t);
+  if(gp>0) {
+    const pulse=.82+.18*Math.sin(t*1.3);
+    const ag=ctx.createRadialGradient(W/2,YT-20,0,W/2,YT-20,430);
+    ag.addColorStop(0,`rgba(${GOLD},${.055*gp*pulse})`);
+    ag.addColorStop(1,`rgba(${GOLD},0)`);
+    ctx.fillStyle=ag; ctx.fillRect(0,0,W,H);
+  }
+
+  // Text writing
+  const pI=prog(TL.writeIlya[0],TL.writeIlya[1],t,easeOut);
+  const pA=prog(TL.writeAmp[0],TL.writeAmp[1],t,easeOut);
+  const pM=prog(TL.writeMasha[0],TL.writeMasha[1],t,easeOut);
+  const shim=prog(TL.shimmer[0],TL.shimmer[1],t,easeIO);
+  const shimPulse=1+.13*Math.sin(t*2.6)*shim;
+
+  if(pI>0) {
+    glowText('Илья',XI,FONT_BIG,pI,CREAM,shimPulse);
+    if(pI<1) penGlow(XI+WI*pI,YT-32,clamp(pI*6,0,1)*clamp((1-pI)*6,0,1)+.25);
+  }
+  if(pA>0) {
+    glowText(' \u0026 ',XA,FONT_BIG,pA,GOLD,1);
+    if(pA<1) penGlow(XA+WA*pA,YT-32,.85);
+  }
+  if(pM>0) {
+    glowText('Мария',XM,FONT_BIG,pM,CREAM,shimPulse);
+    if(pM<1) penGlow(XM+WM*pM,YT-32,clamp(pM*6,0,1)*clamp((1-pM)*6,0,1)+.25);
+  }
+
+  // Date
+  const pD=prog(TL.writeDate[0],TL.writeDate[1],t,easeOut);
+  if(pD>0) {
+    ctx.save();
+    ctx.font=FONT_DATE;
+    ctx.globalAlpha=pD;
+    ctx.shadowColor=`rgba(${GOLD},.7)`; ctx.shadowBlur=18;
+    ctx.fillStyle=`rgba(${GOLD},.95)`;
+    ctx.fillText('07 · 06 · 2026',XD,YD+(1-pD)*14);
+    ctx.restore();
+  }
+
+  // Ornament line
+  const pO=prog(TL.writeOrnament[0],TL.writeOrnament[1],t,easeOut);
+  if(pO>0) {
+    ctx.save();
+    ctx.globalAlpha=pO*.75;
+    ctx.strokeStyle=`rgba(${GOLD},.65)`; ctx.lineWidth=.7;
+    const lw=95*pO;
+    ctx.beginPath(); ctx.moveTo(W/2-lw,YO); ctx.lineTo(W/2+lw,YO); ctx.stroke();
+    ctx.save(); ctx.translate(W/2,YO); ctx.rotate(Math.PI/4);
+    ctx.fillStyle=`rgba(${GOLD},.85)`; ctx.fillRect(-3,-3,6,6);
+    ctx.restore(); ctx.restore();
+  }
+
+  // Spawn ambient sparkles
+  if(t>TL.sparkCont[0] && Math.random()<.07) {
+    const picks=[{x:XI,w:WI},{x:XA,w:WA},{x:XM,w:WM}];
+    const p=picks[Math.floor(Math.random()*3)];
+    addSparkle(p.x+Math.random()*p.w, YT-15-Math.random()*95);
+  }
+
+  // Spawn hearts
+  if(t>TL.hearts[0] && t<TL.hearts[1] && Math.random()<.055) {
+    addHeart(W*.15+Math.random()*W*.7, H*.48+Math.random()*H*.46);
+  }
+
+  tickParts();
+  drawParts();
+
+  // Subtle reflection of text below
+  if(pI+pA+pM > 0.5) {
+    ctx.save();
+    ctx.globalAlpha=.08;
+    ctx.font=FONT_BIG;
+    ctx.scale(1,-1);
+    const refY = -(YT+60);
+    ctx.shadowBlur=0;
+    ctx.fillStyle=`rgb(${CREAM})`;
+    if(pI>0) { ctx.beginPath(); ctx.rect(XI,refY-5,WI*pI,140); ctx.clip(); ctx.fillText('Илья',XI,refY); }
+    ctx.restore();
+
+    ctx.save();
+    ctx.globalAlpha=.06;
+    ctx.font=FONT_BIG;
+    ctx.save();
+    ctx.transform(1,0,0,-1,0,YT*2+60);
+    ctx.fillStyle=`rgb(${CREAM})`;
+    if(pM>0) { ctx.beginPath(); ctx.rect(XM,YT-5,WM*pM,140); ctx.clip(); ctx.fillText('Мария',XM,YT); }
+    ctx.restore(); ctx.restore();
+  }
+}
+
+function frame(ts) {
+  if(!startT) startT=ts;
+  const t=(ts-startT)/1000;
+  draw(Math.min(t,DURATION));
+  if(t<DURATION) {
+    rafId=requestAnimationFrame(frame);
+  } else {
+    document.getElementById('replay').style.display='block';
+  }
+}
+
+document.getElementById('replay').addEventListener('click',function(){
+  this.style.display='none';
+  parts=[];
+  startT=null;
+  if(rafId) cancelAnimationFrame(rafId);
+  rafId=requestAnimationFrame(frame);
+});
+
+Promise.all([
+  document.fonts.load('italic 300 96px "Cormorant Garamond"'),
+  document.fonts.load('300 28px "Cormorant Garamond"'),
+]).then(()=>{ measure(); requestAnimationFrame(frame); })
+  .catch(()=>{ setTimeout(()=>{ measure(); requestAnimationFrame(frame); },1500); });
+</script>
+</body>
+</html>

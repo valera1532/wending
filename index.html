@@ -1,0 +1,1469 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Илья & Мария — 07.06.2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --cream: #f7f3ec;
+        --cream2: #efe8dc;
+        --gold: #c4a46b;
+        --dark: #2e2a25;
+        --muted: #7a6e62;
+        --line: rgba(196, 164, 107, 0.35);
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--cream);
+        color: var(--dark);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 300;
+        overflow-x: hidden;
+      }
+
+      /* ── HERO ─────────────────────────────────────────────── */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 60px 24px;
+        position: relative;
+        overflow: hidden;
+        background: radial-gradient(
+          ellipse at 50% 55%,
+          #ede3d1 0%,
+          var(--cream) 68%
+        );
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          radial-gradient(
+            circle at 18% 22%,
+            rgba(196, 164, 107, 0.07) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 82% 78%,
+            rgba(196, 164, 107, 0.07) 0%,
+            transparent 50%
+          );
+      }
+      .hero > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-ornament {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(11px, 1.2vw, 13px);
+        letter-spacing: 0.42em;
+        color: var(--gold);
+        text-transform: uppercase;
+        margin-bottom: 32px;
+        opacity: 0;
+        animation: fadeUp 1s ease forwards 0.3s;
+      }
+
+      .hero-names {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(70px, 12.5vw, 134px);
+        line-height: 1;
+        letter-spacing: 0.02em;
+        background: linear-gradient(
+          90deg,
+          var(--dark) 20%,
+          #c4a46b 50%,
+          var(--dark) 80%
+        );
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        opacity: 0;
+        animation:
+          fadeUp 1.2s ease forwards 0.6s,
+          shimmerGold 5s linear 2s infinite;
+      }
+      @keyframes shimmerGold {
+        0% {
+          background-position: 160% center;
+        }
+        100% {
+          background-position: -60% center;
+        }
+      }
+      .hero-amp {
+        -webkit-text-fill-color: var(--gold);
+        font-size: 0.72em;
+        vertical-align: middle;
+        margin: 0 6px;
+      }
+
+      .hero-date {
+        margin-top: 28px;
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(14px, 2vw, 22px);
+        font-weight: 300;
+        letter-spacing: 0.55em;
+        color: var(--muted);
+        text-transform: uppercase;
+        opacity: 0;
+        animation: fadeUp 1.2s ease forwards 1s;
+      }
+
+      .divider {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 30px auto;
+        width: min(280px, 72%);
+        opacity: 0;
+        animation: fadeUp 1s ease forwards 1.3s;
+      }
+      .divider::before,
+      .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(196, 164, 107, 0.6),
+          transparent
+        );
+      }
+      .divider-diamond {
+        width: 7px;
+        height: 7px;
+        background: var(--gold);
+        transform: rotate(45deg);
+        flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(196, 164, 107, 0.5);
+      }
+
+      .hero-sub {
+        font-size: clamp(10px, 1.2vw, 12px);
+        letter-spacing: 0.3em;
+        color: var(--muted);
+        text-transform: uppercase;
+        opacity: 0;
+        animation: fadeUp 1s ease forwards 1.5s;
+      }
+
+      .petal {
+        position: absolute;
+        border-radius: 60% 40% 40% 60%;
+        background: rgba(196, 164, 107, 0.2);
+        animation: petalFall linear infinite;
+        pointer-events: none;
+        z-index: 0;
+      }
+      @keyframes petalFall {
+        0% {
+          transform: translateY(-50px) rotate(0deg);
+          opacity: 0;
+        }
+        8% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(110vh) rotate(380deg);
+          opacity: 0;
+        }
+      }
+
+      .scroll-hint {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        opacity: 0;
+        animation: fadeUp 1s ease forwards 2s;
+      }
+      .scroll-hint span {
+        display: block;
+        width: 1px;
+        height: 42px;
+        background: linear-gradient(
+          to bottom,
+          transparent,
+          var(--gold),
+          transparent
+        );
+        animation: scrollPulse 2s ease-in-out infinite;
+      }
+      @keyframes scrollPulse {
+        0%,
+        100% {
+          transform: scaleY(0.3);
+          opacity: 0.3;
+        }
+        50% {
+          transform: scaleY(1);
+          opacity: 0.9;
+        }
+      }
+
+      /* ── COUNTDOWN ────────────────────────────────────────── */
+      .countdown-section {
+        background: var(--dark);
+        padding: 70px 24px;
+        text-align: center;
+      }
+      .section-label {
+        font-size: 10px;
+        letter-spacing: 0.45em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 42px;
+      }
+      .countdown {
+        display: flex;
+        justify-content: center;
+        gap: clamp(14px, 4vw, 56px);
+        flex-wrap: wrap;
+      }
+      .countdown-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .countdown-num {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(44px, 8vw, 82px);
+        font-weight: 300;
+        color: var(--cream);
+        line-height: 1;
+        min-width: 1.6ch;
+      }
+      .countdown-label {
+        font-size: 9px;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      .countdown-sep {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 54px;
+        color: var(--gold);
+        opacity: 0.3;
+        line-height: 1;
+        align-self: flex-start;
+        padding-top: 6px;
+      }
+
+      /* ── SECTIONS SHARED ──────────────────────────────────── */
+      section {
+        padding: 100px 24px;
+      }
+      .section-inner {
+        max-width: 700px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .section-tag {
+        font-size: 10px;
+        letter-spacing: 0.48em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 20px;
+        display: block;
+      }
+      .section-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(30px, 4.5vw, 50px);
+        font-weight: 300;
+        font-style: italic;
+        color: var(--dark);
+        line-height: 1.2;
+        margin-bottom: 24px;
+      }
+      .section-text {
+        font-size: clamp(13px, 1.4vw, 15px);
+        line-height: 2.1;
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+
+      .ornament-hr {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin: 52px auto;
+        max-width: 180px;
+      }
+      .ornament-hr::before,
+      .ornament-hr::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--line);
+      }
+      .ornament-hr svg {
+        width: 20px;
+        height: 20px;
+        fill: var(--gold);
+        opacity: 0.55;
+      }
+
+      /* ── TIMELINE ─────────────────────────────────────────── */
+      .timeline {
+        max-width: 540px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+      }
+      .tl-item {
+        display: grid;
+        grid-template-columns: 72px 1px 1fr;
+        gap: 0 22px;
+        align-items: start;
+        padding-bottom: 38px;
+      }
+      .tl-item:last-child {
+        padding-bottom: 0;
+      }
+      .tl-item:last-child .tl-line {
+        background: transparent;
+      }
+      .tl-time {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 21px;
+        font-weight: 300;
+        color: var(--gold);
+        text-align: right;
+        padding-top: 2px;
+      }
+      .tl-line {
+        background: var(--line);
+        position: relative;
+      }
+      .tl-line::before {
+        content: "";
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--gold);
+        box-shadow: 0 0 8px rgba(196, 164, 107, 0.5);
+      }
+      .tl-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 19px;
+        font-weight: 400;
+        color: var(--dark);
+        margin-bottom: 5px;
+      }
+      .tl-desc {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.8;
+      }
+
+      /* ── CARDS ────────────────────────────────────────────── */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 20px;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+      .card {
+        background: var(--cream2);
+        border: 1px solid var(--line);
+        padding: 38px 22px;
+        text-align: center;
+        transition:
+          transform 0.4s,
+          box-shadow 0.4s,
+          border-color 0.4s;
+      }
+      .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+        border-color: rgba(196, 164, 107, 0.6);
+      }
+      .card-icon {
+        font-size: 26px;
+        margin-bottom: 14px;
+        display: block;
+      }
+      .card-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: 19px;
+        font-weight: 400;
+        color: var(--dark);
+        margin-bottom: 9px;
+      }
+      .card-text {
+        font-size: 13px;
+        color: var(--muted);
+        line-height: 1.9;
+      }
+
+      /* ── DRESSCODE ────────────────────────────────────────── */
+      .dress-section {
+        background: linear-gradient(160deg, #ede3d1 0%, var(--cream) 100%);
+      }
+      .palette-row {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        margin-top: 38px;
+        flex-wrap: wrap;
+      }
+      .palette-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      .palette-circle {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        transition:
+          transform 0.3s,
+          box-shadow 0.3s;
+      }
+      .palette-circle:hover {
+        transform: scale(1.15);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+      }
+      .palette-name {
+        font-size: 10px;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+      }
+
+      /* ── CALENDAR ────────────────────────────────────────── */
+      .cal-section {
+        background: var(--cream);
+      }
+      .cal-wrap {
+        max-width: 340px;
+        margin: 0 auto;
+      }
+      .cal-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+      }
+      .cal-dn {
+        font-size: 9px;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: var(--gold);
+        text-align: center;
+        padding-bottom: 16px;
+      }
+      .cal-d {
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Cormorant Garamond", serif;
+        font-size: 19px;
+        color: var(--muted);
+      }
+      .cal-wedding {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark);
+        font-size: 22px;
+        font-weight: 400;
+      }
+      .cal-heart {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: heartPulse 3s ease-in-out infinite;
+        pointer-events: none;
+      }
+      .cal-wnum {
+        position: relative;
+        z-index: 1;
+        line-height: 1;
+      }
+      @keyframes heartPulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.12);
+        }
+      }
+
+      /* ── VIDEO HERO ──────────────────────────────────────── */
+      .video-hero {
+        position: relative;
+        width: 100%;
+        height: 100svh;
+        min-height: 480px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .video-hero video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+      .video-hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(14, 11, 9, 0.15) 0%,
+          rgba(14, 11, 9, 0.48) 55%,
+          rgba(14, 11, 9, 0.78) 100%
+        );
+      }
+      .video-hero-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .video-hero-label {
+        font-size: 10px;
+        letter-spacing: 0.45em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 18px;
+        display: block;
+      }
+      .video-hero-title {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(40px, 9vw, 82px);
+        font-style: italic;
+        font-weight: 300;
+        color: var(--cream);
+        margin-bottom: 0;
+        line-height: 1.1;
+      }
+      .video-play-btn {
+        display: none;
+        width: 76px;
+        height: 76px;
+        margin-top: 36px;
+        border: 2px solid rgba(196, 164, 107, 0.8);
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.25);
+        transition:
+          transform 0.3s,
+          border-color 0.3s,
+          box-shadow 0.3s;
+      }
+      .video-play-btn:hover {
+        transform: scale(1.1);
+        border-color: var(--gold);
+        box-shadow: 0 0 40px rgba(196, 164, 107, 0.35);
+      }
+      .video-play-btn::after {
+        content: "";
+        border-left: 22px solid rgba(196, 164, 107, 0.95);
+        border-top: 13px solid transparent;
+        border-bottom: 13px solid transparent;
+        margin-left: 6px;
+      }
+      .video-mute-btn {
+        position: absolute;
+        bottom: 24px;
+        right: 24px;
+        z-index: 3;
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(196, 164, 107, 0.45);
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.42);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          border-color 0.3s,
+          background 0.3s;
+        font-size: 17px;
+        line-height: 1;
+      }
+      .video-mute-btn:hover {
+        border-color: var(--gold);
+        background: rgba(0, 0, 0, 0.65);
+      }
+
+      /* ── CANVAS / QUOTE SECTION ─────────────────────────── */
+      .canvas-section {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #141210;
+        padding: 80px 24px;
+        text-align: center;
+      }
+      .canvas-bg-iframe {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 130%;
+        height: 130%;
+        border: none;
+        opacity: 0.1;
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(2px);
+      }
+      .canvas-content {
+        position: relative;
+        z-index: 2;
+        max-width: 680px;
+        width: 100%;
+      }
+      .quote-text {
+        font-family: "Cormorant Garamond", serif;
+        font-size: clamp(24px, 4vw, 44px);
+        font-weight: 300;
+        font-style: italic;
+        color: var(--cream);
+        line-height: 1.7;
+        margin: 0 auto 28px;
+      }
+      .quote-author {
+        font-size: 11px;
+        letter-spacing: 0.38em;
+        color: var(--gold);
+        text-transform: uppercase;
+      }
+
+      /* ── RSVP ─────────────────────────────────────────────── */
+      .rsvp-section {
+        background: var(--cream);
+      }
+      .form {
+        max-width: 520px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .form-label {
+        font-size: 10px;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: var(--gold);
+      }
+      .form-input,
+      .form-textarea {
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid var(--line);
+        padding: 12px 0;
+        font-family: "Montserrat", sans-serif;
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--dark);
+        outline: none;
+        transition: border-color 0.3s;
+        width: 100%;
+      }
+      .form-input:focus,
+      .form-textarea:focus {
+        border-color: var(--gold);
+      }
+      .form-textarea {
+        resize: none;
+        height: 80px;
+      }
+      .radio-group {
+        display: flex;
+        gap: 28px;
+        flex-wrap: wrap;
+      }
+      .radio-label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        color: var(--muted);
+        cursor: pointer;
+      }
+      .radio-label input {
+        display: none;
+      }
+      .radio-custom {
+        width: 18px;
+        height: 18px;
+        border: 1px solid var(--gold);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: background 0.2s;
+      }
+      .radio-label input:checked ~ .radio-custom {
+        background: var(--gold);
+      }
+      .radio-custom::after {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: white;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .radio-label input:checked ~ .radio-custom::after {
+        opacity: 1;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 15px 44px;
+        border: 1px solid var(--gold);
+        background: transparent;
+        font-family: "Montserrat", sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: var(--dark);
+        cursor: pointer;
+        transition:
+          background 0.35s,
+          color 0.35s,
+          box-shadow 0.35s;
+        margin-top: 12px;
+        align-self: center;
+        text-decoration: none;
+      }
+      .btn:hover {
+        background: var(--gold);
+        color: var(--cream);
+        box-shadow: 0 8px 28px rgba(196, 164, 107, 0.3);
+      }
+
+      /* ── FOOTER ───────────────────────────────────────────── */
+      footer {
+        background: var(--dark);
+        padding: 60px 24px;
+        text-align: center;
+      }
+      .footer-names {
+        font-family: "Cormorant Garamond", serif;
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(34px, 6vw, 56px);
+        color: var(--cream);
+        margin-bottom: 18px;
+      }
+      .footer-date {
+        font-size: 11px;
+        letter-spacing: 0.5em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 34px;
+      }
+      .footer-heart {
+        color: var(--gold);
+        font-size: 18px;
+        display: inline-block;
+        animation: pulse 2.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+      }
+
+      /* ── SCROLL REVEAL ────────────────────────────────────── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(44px);
+        transition:
+          opacity 0.95s ease,
+          transform 0.95s ease;
+      }
+      .reveal.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-delay-1 {
+        transition-delay: 0.15s;
+      }
+      .reveal-delay-2 {
+        transition-delay: 0.3s;
+      }
+      .reveal-delay-3 {
+        transition-delay: 0.45s;
+      }
+      .reveal-delay-4 {
+        transition-delay: 0.6s;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(28px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        section {
+          padding: 72px 20px;
+        }
+        .countdown-section {
+          padding: 52px 20px;
+        }
+        .hero {
+          padding: 48px 20px;
+        }
+        .hero-sub {
+          letter-spacing: 0.15em;
+        }
+        .video-hero {
+          height: 100svh;
+        }
+        .video-mute-btn {
+          bottom: 16px;
+          right: 16px;
+        }
+        .cal-wrap {
+          max-width: 100%;
+        }
+        .cal-d {
+          height: 44px;
+          font-size: 16px;
+        }
+        .cal-dn {
+          font-size: 8px;
+          letter-spacing: 0.14em;
+          padding-bottom: 12px;
+        }
+        .cal-wedding {
+          font-size: 19px;
+        }
+        .canvas-section {
+          padding: 60px 20px;
+          min-height: 100svh;
+        }
+        .canvas-bg-iframe {
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          transform: none;
+        }
+        .quote-text {
+          font-size: clamp(22px, 5vw, 38px);
+        }
+        .radio-group {
+          gap: 18px;
+        }
+        .btn {
+          padding: 14px 36px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        section {
+          padding: 56px 16px;
+        }
+        .countdown-section {
+          padding: 40px 16px;
+        }
+        .countdown-sep {
+          display: none;
+        }
+        .hero {
+          padding: 40px 16px;
+        }
+        .section-title {
+          font-size: clamp(26px, 7vw, 38px);
+        }
+        .tl-item {
+          grid-template-columns: 46px 1px 1fr;
+          gap: 0 10px;
+        }
+        .tl-time {
+          font-size: 15px;
+        }
+        .tl-title {
+          font-size: 16px;
+        }
+        .tl-desc {
+          font-size: 12px;
+        }
+        .cal-d {
+          height: 38px;
+          font-size: 14px;
+        }
+        .cal-heart {
+          width: 40px;
+          height: 40px;
+        }
+        .cal-dn {
+          font-size: 7px;
+          letter-spacing: 0.08em;
+        }
+        .card {
+          padding: 28px 16px;
+        }
+        .palette-row {
+          gap: 10px;
+        }
+        .palette-circle {
+          width: 42px;
+          height: 42px;
+        }
+        .radio-group {
+          gap: 12px;
+        }
+        .radio-label {
+          font-size: 13px;
+        }
+        .quote-text {
+          font-size: clamp(20px, 5.5vw, 34px);
+        }
+        .video-play-btn {
+          width: 62px;
+          height: 62px;
+          margin-top: 28px;
+        }
+        .video-play-btn::after {
+          border-left-width: 18px;
+          border-top-width: 11px;
+          border-bottom-width: 11px;
+        }
+        footer {
+          padding: 44px 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ── HERO ─────────────────────────────────────────────── -->
+    <section class="hero" id="top">
+      <p class="hero-ornament">Свадебное приглашение</p>
+      <h1 class="hero-names">Илья <span class="hero-amp">&amp;</span> Мария</h1>
+      <p class="hero-date">07 · 06 · 2026</p>
+      <div class="divider"><div class="divider-diamond"></div></div>
+      <p class="hero-sub">Мы приглашаем вас разделить с нами этот день</p>
+      <div class="scroll-hint"><span></span></div>
+    </section>
+
+    <!-- ── COUNTDOWN ─────────────────────────────────────────── -->
+    <div class="countdown-section">
+      <p class="section-label">До свадьбы осталось</p>
+      <div class="countdown">
+        <div class="countdown-item">
+          <span class="countdown-num" id="cd-days">00</span
+          ><span class="countdown-label">Дней</span>
+        </div>
+        <div class="countdown-sep">·</div>
+        <div class="countdown-item">
+          <span class="countdown-num" id="cd-hours">00</span
+          ><span class="countdown-label">Часов</span>
+        </div>
+        <div class="countdown-sep">·</div>
+        <div class="countdown-item">
+          <span class="countdown-num" id="cd-minutes">00</span
+          ><span class="countdown-label">Минут</span>
+        </div>
+        <div class="countdown-sep">·</div>
+        <div class="countdown-item">
+          <span class="countdown-num" id="cd-seconds">00</span
+          ><span class="countdown-label">Секунд</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ВИДЕО ──────────────────────────────────────────────── -->
+    <div class="video-hero">
+      <video id="mainVideo" preload="metadata" playsinline muted loop autoplay>
+        <source src="13787663633067.mp4" type="video/mp4" />
+      </video>
+      <div class="video-hero-overlay"></div>
+      <div class="video-hero-content">
+        <span class="video-hero-label reveal">Наш день</span>
+        <h2 class="video-hero-title reveal reveal-delay-1">Илья &amp; Мария</h2>
+        <button
+          class="video-play-btn"
+          id="playOverlay"
+          aria-label="Воспроизвести"
+        ></button>
+      </div>
+      <button class="video-mute-btn" id="muteBtn" aria-label="Звук">🔇</button>
+    </div>
+
+    <!-- ── CALENDAR ───────────────────────────────────────────── -->
+    <section class="cal-section">
+      <div class="section-inner">
+        <span class="section-tag reveal">Запомните дату</span>
+        <h2 class="section-title reveal reveal-delay-1">Июнь · 2026</h2>
+        <div class="cal-wrap reveal reveal-delay-2">
+          <div class="cal-grid">
+            <span class="cal-dn">Пн</span><span class="cal-dn">Вт</span
+            ><span class="cal-dn">Ср</span><span class="cal-dn">Чт</span
+            ><span class="cal-dn">Пт</span><span class="cal-dn">Сб</span
+            ><span class="cal-dn">Вс</span> <span class="cal-d">1</span
+            ><span class="cal-d">2</span><span class="cal-d">3</span
+            ><span class="cal-d">4</span><span class="cal-d">5</span
+            ><span class="cal-d">6</span>
+            <span class="cal-d cal-wedding">
+              <svg
+                class="cal-heart"
+                viewBox="0 0 100 92"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M50 85 C50 85 8 56 8 28 C8 15 18 6 30 6 C38 6 46 11 50 19 C54 11 62 6 70 6 C82 6 92 15 92 28 C92 56 50 85 50 85 Z"
+                  stroke="var(--gold)"
+                  stroke-width="3.5"
+                  fill="rgba(196,164,107,0.12)"
+                />
+              </svg>
+              <span class="cal-wnum">7</span>
+            </span>
+            <span class="cal-d">8</span><span class="cal-d">9</span
+            ><span class="cal-d">10</span><span class="cal-d">11</span
+            ><span class="cal-d">12</span><span class="cal-d">13</span
+            ><span class="cal-d">14</span> <span class="cal-d">15</span
+            ><span class="cal-d">16</span><span class="cal-d">17</span
+            ><span class="cal-d">18</span><span class="cal-d">19</span
+            ><span class="cal-d">20</span><span class="cal-d">21</span>
+            <span class="cal-d">22</span><span class="cal-d">23</span
+            ><span class="cal-d">24</span><span class="cal-d">25</span
+            ><span class="cal-d">26</span><span class="cal-d">27</span
+            ><span class="cal-d">28</span> <span class="cal-d">29</span
+            ><span class="cal-d">30</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── WELCOME ────────────────────────────────────────────── -->
+    <section>
+      <div class="section-inner">
+        <span class="section-tag reveal">Дорогой гость</span>
+        <h2 class="section-title reveal reveal-delay-1">
+          Мы рады приветствовать<br />вас на нашем торжестве
+        </h2>
+        <p class="section-text reveal reveal-delay-2">
+          7 июня 2026 года мы соединим наши сердца и жизни. В этот особый день
+          мы хотим, чтобы рядом с нами были самые близкие и любимые люди — те,
+          кто был с нами на пути к этому счастливому моменту.
+        </p>
+        <p class="section-text reveal reveal-delay-3">
+          Ваше присутствие станет для нас лучшим подарком и сделает этот день
+          по-настоящему незабываемым.
+        </p>
+        <div class="ornament-hr reveal">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            />
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROGRAM ────────────────────────────────────────────── -->
+    <section style="background: var(--cream2)">
+      <div class="section-inner">
+        <span class="section-tag reveal">Программа дня</span>
+        <h2 class="section-title reveal reveal-delay-1">
+          Как пройдёт<br />наш праздник
+        </h2>
+        <br /><br />
+        <div class="timeline">
+          <div class="tl-item reveal">
+            <div class="tl-time">14:00</div>
+            <div class="tl-line"></div>
+            <div class="tl-content">
+              <div class="tl-title">Сбор гостей</div>
+              <div class="tl-desc">
+                Встреча гостей, приветственные напитки, живая музыка
+              </div>
+            </div>
+          </div>
+          <div class="tl-item reveal reveal-delay-1">
+            <div class="tl-time">15:00</div>
+            <div class="tl-line"></div>
+            <div class="tl-content">
+              <div class="tl-title">Церемония</div>
+              <div class="tl-desc">
+                Торжественная регистрация брака, обмен клятвами и кольцами
+              </div>
+            </div>
+          </div>
+          <div class="tl-item reveal reveal-delay-2">
+            <div class="tl-time">16:00</div>
+            <div class="tl-line"></div>
+            <div class="tl-content">
+              <div class="tl-title">Фотосессия</div>
+              <div class="tl-desc">
+                Прогулка и фотографии на фоне живописных локаций
+              </div>
+            </div>
+          </div>
+          <div class="tl-item reveal reveal-delay-3">
+            <div class="tl-time">17:30</div>
+            <div class="tl-line"></div>
+            <div class="tl-content">
+              <div class="tl-title">Банкет</div>
+              <div class="tl-desc">
+                Торжественный ужин, поздравления, первый танец, развлечения
+              </div>
+            </div>
+          </div>
+          <div class="tl-item reveal reveal-delay-4">
+            <div class="tl-time">00:00</div>
+            <div class="tl-line"></div>
+            <div class="tl-content">
+              <div class="tl-title">Торт и финал</div>
+              <div class="tl-desc">
+                Разрезание торта, прощальный танец, фейерверк
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── DETAILS ────────────────────────────────────────────── -->
+    <section>
+      <div class="section-inner" style="max-width: 760px">
+        <span class="section-tag reveal">Детали</span>
+        <h2 class="section-title reveal reveal-delay-1">
+          Всё, что нужно знать
+        </h2>
+        <br /><br />
+        <div class="cards">
+          <div class="card reveal">
+            <span class="card-icon">📍</span>
+            <div class="card-title">Место</div>
+            <div class="card-text">
+              Банкетный зал<br /><br />Уточняется<br />у организаторов
+            </div>
+          </div>
+          <div class="card reveal reveal-delay-1">
+            <span class="card-icon">🗓</span>
+            <div class="card-title">Дата</div>
+            <div class="card-text">
+              Воскресенье<br />7 июня 2026<br /><br />Начало в 14:00
+            </div>
+          </div>
+          <div class="card reveal reveal-delay-2">
+            <span class="card-icon">🥂</span>
+            <div class="card-title">Формат</div>
+            <div class="card-text">
+              Торжественный<br />банкет с живой<br />музыкой и танцами
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── ЦИТАТА ────────────────────────────────────────────── -->
+    <div class="canvas-section">
+      <iframe class="canvas-bg-iframe" src="video.html" scrolling="no"></iframe>
+      <div class="canvas-content">
+        <p class="quote-text reveal">
+          «Любовь — это не то, что мы ищем.<br />Это то, что мы выбираем каждый
+          день»
+        </p>
+        <p class="quote-author reveal reveal-delay-1">
+          Илья &amp; Мария · 07.06.2026
+        </p>
+      </div>
+    </div>
+
+    <!-- ── RSVP ───────────────────────────────────────────────── -->
+    <section class="rsvp-section">
+      <div class="section-inner">
+        <span class="section-tag reveal">Подтверждение</span>
+        <h2 class="section-title reveal reveal-delay-1">
+          Подтвердите своё<br />присутствие
+        </h2>
+        <p class="section-text reveal reveal-delay-2">
+          Просим ответить до <strong>01 мая 2026 года</strong>
+        </p>
+        <br />
+        <form class="form reveal reveal-delay-2" id="rsvpForm">
+          <div class="form-group">
+            <label class="form-label">Ваше имя</label
+            ><input
+              class="form-input"
+              type="text"
+              placeholder="Введите ваше имя"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Вы придёте?</label>
+            <div class="radio-group">
+              <label class="radio-label"
+                ><input type="radio" name="attend" value="yes" required /><span
+                  class="radio-custom"
+                ></span
+                >Да, с радостью!</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="attend" value="no" /><span
+                  class="radio-custom"
+                ></span
+                >К сожалению, нет</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Предпочтения в еде</label>
+            <div class="radio-group">
+              <label class="radio-label"
+                ><input type="radio" name="food" value="meat" /><span
+                  class="radio-custom"
+                ></span
+                >Мясо</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="food" value="fish" /><span
+                  class="radio-custom"
+                ></span
+                >Рыба</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="food" value="veg" /><span
+                  class="radio-custom"
+                ></span
+                >Вегетарианское</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Предпочтения в алкоголе</label>
+            <div class="radio-group">
+              <label class="radio-label"
+                ><input type="radio" name="alcohol" value="wine" /><span
+                  class="radio-custom"
+                ></span
+                >Вино</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="alcohol" value="samogon" /><span
+                  class="radio-custom"
+                ></span
+                >Самогон</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="alcohol" value="beer" /><span
+                  class="radio-custom"
+                ></span
+                >Пиво</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="alcohol" value="champagne" /><span
+                  class="radio-custom"
+                ></span
+                >Шампанское</label
+              >
+              <label class="radio-label"
+                ><input type="radio" name="alcohol" value="none" /><span
+                  class="radio-custom"
+                ></span
+                >Не пью</label
+              >
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Особые пожелания</label
+            ><textarea
+              class="form-textarea"
+              placeholder="Аллергии, предпочтения…"
+            ></textarea>
+          </div>
+          <button class="btn" type="submit">Подтвердить</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────── -->
+    <footer>
+      <div class="footer-names">Илья &amp; Мария</div>
+      <div class="footer-date">07 · 06 · 2026</div>
+      <div class="footer-heart">♥</div>
+    </footer>
+
+    <script>
+      // ── PETALS in hero ──────────────────────────────────────────
+      (function () {
+        const hero = document.querySelector(".hero");
+        for (let i = 0; i < 20; i++) {
+          const p = document.createElement("div");
+          p.className = "petal";
+          const w = 4 + Math.random() * 7,
+            h = 6 + Math.random() * 9;
+          p.style.cssText = `left:${Math.random() * 100}%;width:${w}px;height:${h}px;animation-duration:${8 + Math.random() * 12}s;animation-delay:${Math.random() * 10}s;opacity:${0.12 + Math.random() * 0.28};`;
+          hero.appendChild(p);
+        }
+      })();
+
+      // ── COUNTDOWN ──────────────────────────────────────────────
+      (function () {
+        const target = new Date("2026-06-07T15:00:00");
+        const els = {
+          days: document.getElementById("cd-days"),
+          hours: document.getElementById("cd-hours"),
+          minutes: document.getElementById("cd-minutes"),
+          seconds: document.getElementById("cd-seconds"),
+        };
+        function upd() {
+          const d = target - Date.now();
+          if (d <= 0) {
+            Object.values(els).forEach((el) => (el.textContent = "00"));
+            return;
+          }
+          els.days.textContent = String(Math.floor(d / 86400000)).padStart(
+            2,
+            "0",
+          );
+          els.hours.textContent = String(
+            Math.floor((d % 86400000) / 3600000),
+          ).padStart(2, "0");
+          els.minutes.textContent = String(
+            Math.floor((d % 3600000) / 60000),
+          ).padStart(2, "0");
+          els.seconds.textContent = String(
+            Math.floor((d % 60000) / 1000),
+          ).padStart(2, "0");
+        }
+        upd();
+        setInterval(upd, 1000);
+      })();
+
+      // ── SCROLL REVEAL ──────────────────────────────────────────
+      (function () {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) {
+                e.target.classList.add("visible");
+                obs.unobserve(e.target);
+              }
+            });
+          },
+          { threshold: 0.12 },
+        );
+        document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+      })();
+
+      // ── VIDEO HERO ─────────────────────────────────────────────
+      (function () {
+        const vid = document.getElementById("mainVideo");
+        const playBtn = document.getElementById("playOverlay");
+        const muteBtn = document.getElementById("muteBtn");
+
+        const attempt = vid.play();
+        if (attempt !== undefined) {
+          attempt.catch(() => {
+            playBtn.style.display = "flex";
+          });
+        }
+
+        playBtn.addEventListener("click", () => {
+          vid.play();
+          playBtn.style.display = "none";
+        });
+
+        muteBtn.addEventListener("click", () => {
+          vid.muted = !vid.muted;
+          muteBtn.textContent = vid.muted ? "🔇" : "🔊";
+        });
+      })();
+
+      // ── RSVP ───────────────────────────────────────────────────
+      document
+        .getElementById("rsvpForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const btn = this.querySelector(".btn");
+          btn.textContent = "Спасибо! ♥";
+          btn.style.background = "var(--gold)";
+          btn.style.color = "var(--cream)";
+          btn.disabled = true;
+        });
+    </script>
+  </body>
+</html>
