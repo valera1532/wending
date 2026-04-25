@@ -129,11 +129,12 @@
       .hero-date {
         margin-top: 28px;
         font-family: "Cormorant Garamond", serif;
-        font-size: clamp(14px, 2vw, 22px);
-        font-weight: 300;
+        font-size: clamp(16px, 2.2vw, 24px);
+        font-weight: 500;
         letter-spacing: 0.55em;
-        color: var(--muted);
+        color: #5f5449;
         text-transform: uppercase;
+        text-shadow: 0 1px 10px rgba(247, 243, 236, 0.75);
         opacity: 0;
         animation: fadeUp 1.2s ease forwards 1s;
       }
@@ -169,10 +170,12 @@
       }
 
       .hero-sub {
-        font-size: clamp(10px, 1.2vw, 12px);
+        font-size: clamp(11px, 1.35vw, 14px);
+        font-weight: 500;
         letter-spacing: 0.3em;
-        color: var(--muted);
+        color: #5f5449;
         text-transform: uppercase;
+        text-shadow: 0 1px 10px rgba(247, 243, 236, 0.75);
         opacity: 0;
         animation: fadeUp 1s ease forwards 1.5s;
       }
@@ -743,6 +746,11 @@
         gap: 28px;
         flex-wrap: wrap;
       }
+      .checkbox-group {
+        display: flex;
+        gap: 18px 28px;
+        flex-wrap: wrap;
+      }
       .radio-label {
         display: flex;
         align-items: center;
@@ -780,6 +788,25 @@
       .radio-label input:checked ~ .radio-custom::after {
         opacity: 1;
       }
+      .checkbox-group .radio-label {
+        font-size: 16px;
+        color: var(--dark);
+      }
+      .checkbox-group .radio-custom {
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+      }
+      .checkbox-group .radio-custom::after {
+        width: 10px;
+        height: 6px;
+        border: 2px solid #fff;
+        border-top: none;
+        border-right: none;
+        border-radius: 0;
+        background: transparent;
+        transform: translateY(-2px) rotate(-45deg);
+      }
 
       .btn {
         display: inline-block;
@@ -805,6 +832,12 @@
         background: var(--gold);
         color: var(--cream);
         box-shadow: 0 8px 28px rgba(196, 164, 107, 0.3);
+      }
+      .form-status {
+        min-height: 18px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
       }
 
       /* ── FOOTER ───────────────────────────────────────────── */
@@ -1016,7 +1049,6 @@
   <body>
     <!-- ── HERO ─────────────────────────────────────────────── -->
     <section class="hero" id="top">
-      <p class="hero-ornament">Свадебное приглашение</p>
       <h1 class="hero-names">Илья <span class="hero-amp">&amp;</span> Мария</h1>
       <p class="hero-date">07 · 06 · 2026</p>
       <div class="divider"><div class="divider-diamond"></div></div>
@@ -1057,8 +1089,6 @@
       </video>
       <div class="video-hero-overlay"></div>
       <div class="video-hero-content">
-        <span class="video-hero-label reveal">Наш день</span>
-        <h2 class="video-hero-title reveal reveal-delay-1">Илья &amp; Мария</h2>
         <button
           class="video-play-btn"
           id="playOverlay"
@@ -1121,11 +1151,6 @@
         <h2 class="section-title reveal reveal-delay-1">
           Мы рады приветствовать<br />вас на нашем торжестве
         </h2>
-        <p class="section-text reveal reveal-delay-2">
-          7 июня 2026 года мы соединим наши сердца и жизни. В этот особый день
-          мы хотим, чтобы рядом с нами были самые близкие и любимые люди — те,
-          кто был с нами на пути к этому счастливому моменту.
-        </p>
         <p class="section-text reveal reveal-delay-3">
           Ваше присутствие станет для нас лучшим подарком и сделает этот день
           по-настоящему незабываемым.
@@ -1150,7 +1175,7 @@
         <br /><br />
         <div class="timeline">
           <div class="tl-item reveal">
-            <div class="tl-time">14:00</div>
+            <div class="tl-time">16:30</div>
             <div class="tl-line"></div>
             <div class="tl-content">
               <div class="tl-title">Сбор гостей</div>
@@ -1160,7 +1185,7 @@
             </div>
           </div>
           <div class="tl-item reveal reveal-delay-1">
-            <div class="tl-time">15:00</div>
+            <div class="tl-time">17:00</div>
             <div class="tl-line"></div>
             <div class="tl-content">
               <div class="tl-title">Церемония</div>
@@ -1170,32 +1195,12 @@
             </div>
           </div>
           <div class="tl-item reveal reveal-delay-2">
-            <div class="tl-time">16:00</div>
-            <div class="tl-line"></div>
-            <div class="tl-content">
-              <div class="tl-title">Фотосессия</div>
-              <div class="tl-desc">
-                Прогулка и фотографии на фоне живописных локаций
-              </div>
-            </div>
-          </div>
-          <div class="tl-item reveal reveal-delay-3">
             <div class="tl-time">17:30</div>
             <div class="tl-line"></div>
             <div class="tl-content">
-              <div class="tl-title">Банкет</div>
+              <div class="tl-title">Начало банкета</div>
               <div class="tl-desc">
                 Торжественный ужин, поздравления, первый танец, развлечения
-              </div>
-            </div>
-          </div>
-          <div class="tl-item reveal reveal-delay-4">
-            <div class="tl-time">00:00</div>
-            <div class="tl-line"></div>
-            <div class="tl-content">
-              <div class="tl-title">Торт и финал</div>
-              <div class="tl-desc">
-                Разрезание торта, прощальный танец, фейерверк
               </div>
             </div>
           </div>
@@ -1223,7 +1228,7 @@
             <span class="card-icon">🗓</span>
             <div class="card-title">Дата</div>
             <div class="card-text">
-              Воскресенье<br />7 июня 2026<br /><br />Начало в 14:00
+              Воскресенье<br />7 июня 2026<br /><br />Начало в 16:30
             </div>
           </div>
           <div class="card reveal reveal-delay-2">
@@ -1259,7 +1264,7 @@
           Подтвердите своё<br />присутствие
         </h2>
         <p class="section-text reveal reveal-delay-2">
-          Просим ответить до <strong>01 мая 2026 года</strong>
+          Просим ответить до <strong>11 мая 2026 года</strong>
         </p>
         <br />
         <form class="form reveal reveal-delay-2" id="rsvpForm">
@@ -1268,6 +1273,7 @@
             ><input
               class="form-input"
               type="text"
+              name="name"
               placeholder="Введите ваше имя"
               required
             />
@@ -1314,33 +1320,46 @@
           </div>
           <div class="form-group">
             <label class="form-label">Предпочтения в алкоголе</label>
-            <div class="radio-group">
+            <div class="checkbox-group">
               <label class="radio-label"
-                ><input type="radio" name="alcohol" value="wine" /><span
-                  class="radio-custom"
-                ></span
-                >Вино</label
+                ><input
+                  type="checkbox"
+                  name="alcohol"
+                  value="white-wine"
+                /><span class="radio-custom"></span>Вино белое</label
               >
               <label class="radio-label"
-                ><input type="radio" name="alcohol" value="samogon" /><span
+                ><input type="checkbox" name="alcohol" value="red-wine" /><span
+                  class="radio-custom"
+                ></span
+                >Вино красное</label
+              >
+              <label class="radio-label"
+                ><input type="checkbox" name="alcohol" value="samogon" /><span
                   class="radio-custom"
                 ></span
                 >Самогон</label
               >
               <label class="radio-label"
-                ><input type="radio" name="alcohol" value="beer" /><span
+                ><input type="checkbox" name="alcohol" value="cognac" /><span
                   class="radio-custom"
                 ></span
-                >Пиво</label
+                >Коньяк</label
               >
               <label class="radio-label"
-                ><input type="radio" name="alcohol" value="champagne" /><span
+                ><input type="checkbox" name="alcohol" value="vodka" /><span
+                  class="radio-custom"
+                ></span
+                >Водка</label
+              >
+              <label class="radio-label"
+                ><input type="checkbox" name="alcohol" value="champagne" /><span
                   class="radio-custom"
                 ></span
                 >Шампанское</label
               >
               <label class="radio-label"
-                ><input type="radio" name="alcohol" value="none" /><span
+                ><input type="checkbox" name="alcohol" value="none" /><span
                   class="radio-custom"
                 ></span
                 >Не пью</label
@@ -1351,10 +1370,12 @@
             <label class="form-label">Особые пожелания</label
             ><textarea
               class="form-textarea"
+              name="wishes"
               placeholder="Аллергии, предпочтения…"
             ></textarea>
           </div>
           <button class="btn" type="submit">Подтвердить</button>
+          <p class="form-status" id="formStatus"></p>
         </form>
       </div>
     </section>
@@ -1382,7 +1403,7 @@
 
       // ── COUNTDOWN ──────────────────────────────────────────────
       (function () {
-        const target = new Date("2026-06-07T15:00:00");
+        const target = new Date("2026-06-07T16:30:00");
         const els = {
           days: document.getElementById("cd-days"),
           hours: document.getElementById("cd-hours"),
@@ -1456,13 +1477,86 @@
       // ── RSVP ───────────────────────────────────────────────────
       document
         .getElementById("rsvpForm")
-        .addEventListener("submit", function (e) {
+        .addEventListener("submit", async function (e) {
           e.preventDefault();
-          const btn = this.querySelector(".btn");
-          btn.textContent = "Спасибо! ♥";
-          btn.style.background = "var(--gold)";
-          btn.style.color = "var(--cream)";
+
+          const form = this;
+          const btn = form.querySelector(".btn");
+          const status = document.getElementById("formStatus");
+          const formData = new FormData(form);
+          const labels = {
+            attend: {
+              yes: "Да, с радостью!",
+              no: "К сожалению, нет",
+            },
+            food: {
+              meat: "Мясо",
+              fish: "Рыба",
+              veg: "Вегетарианское",
+            },
+            alcohol: {
+              "white-wine": "Вино белое",
+              "red-wine": "Вино красное",
+              samogon: "Самогон",
+              cognac: "Коньяк",
+              vodka: "Водка",
+              champagne: "Шампанское",
+              none: "Не пью",
+            },
+          };
+
+          if (formData.get("attend")) {
+            formData.set("attend", labels.attend[formData.get("attend")]);
+          }
+          if (formData.get("food")) {
+            formData.set("food", labels.food[formData.get("food")]);
+          }
+          const alcoholValues = formData.getAll("alcohol");
+          if (alcoholValues.length) {
+            formData.delete("alcohol");
+            formData.append(
+              "alcohol",
+              alcoholValues.map((value) => labels.alcohol[value]).join(", "),
+            );
+          }
+
+          formData.append(
+            "_subject",
+            "Новое подтверждение со свадебного сайта",
+          );
+          formData.append("_captcha", "false");
+          formData.append("_template", "table");
+
           btn.disabled = true;
+          btn.textContent = "Отправляем...";
+          status.textContent = "";
+
+          try {
+            const response = await fetch(
+              "https://formsubmit.co/ajax/konkina01@bk.ru",
+              {
+                method: "POST",
+                headers: {
+                  Accept: "application/json",
+                },
+                body: formData,
+              },
+            );
+
+            if (!response.ok) {
+              throw new Error("Send failed");
+            }
+
+            btn.textContent = "Спасибо!";
+            btn.style.background = "var(--gold)";
+            btn.style.color = "var(--cream)";
+            status.textContent = "Ответ отправлен.";
+            form.reset();
+          } catch (error) {
+            btn.disabled = false;
+            btn.textContent = "Подтвердить";
+            status.textContent = "Не удалось отправить. Попробуйте ещё раз.";
+          }
         });
     </script>
   </body>
